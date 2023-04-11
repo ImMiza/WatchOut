@@ -3,6 +3,7 @@ import Vector from "./utils/Vector";
 import Entity from "./utils/Entity";
 import Spaceship from './utils/Spaceship';
 import Location from './utils/Location';
+import Timer from './components/settings/timer';
 
 function App() {
   
@@ -28,6 +29,7 @@ function App() {
 
   return (
       <div>
+        <Timer></Timer>
         {spaceship.getJsxSpaceship()}
       </div>
   );

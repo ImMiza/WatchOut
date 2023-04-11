@@ -47,8 +47,6 @@ export default class Spaceship extends Entity {
     }
 
     getJsxSpaceship():JSX.Element {
-    console.log(this.getIsMoving);
-    console.log(this.getWidth);
     console.log(this.getWidth);
         return (
             <div style={{

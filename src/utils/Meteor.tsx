@@ -5,25 +5,32 @@ import Vector from "./Vector";
 export default class Meteor extends Entity {
    constructor(targetLocation: Location, image: string, width: number, height: number) {
        const location = Meteor.generateRandomPosition();
-       super(location, Meteor.getVector(location, targetLocation).multiply(4), image, width, height);
+       const vector = Meteor.getVector(location, targetLocation);
+       location.setRotation = Vector.vectorToAngle(vector);
+       console.log(location.getRotation)
+       super(location, vector.multiply(4), image, width, height);
    }
 
    get jsxElement(): JSX.Element {
       return (
           <div style={{
-             width: '50px',
-             height: '50px',
-             position: 'fixed',
-             backgroundColor: 'red',
-             left: this.getLocation.getX,
-             top: this.getLocation.getY
+              width: '50px',
+              height: '50px',
+              position: 'fixed',
+              left: this.getLocation.getX,
+              top: this.getLocation.getY,
+              background: `url('${this.getImage}')`,
+              transform: `rotate(${this.getLocation.getRotation}deg)`,
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
           }}>
           </div>
       )
    }
 
    move(): void {
-       this.setLocation = new Location(this.getLocation.getX + this.getVector.getX, this.getLocation.getY + this.getVector.getY)
+       this.setLocation = new Location(this.getLocation.getX + this.getVector.getX, this.getLocation.getY + this.getVector.getY, this.getLocation.getRotation)
    }
 
    static generateRandomPosition(): Location {

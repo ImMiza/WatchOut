@@ -42,4 +42,11 @@ export default class Vector {
     public divide(scalar: number): Vector {
         return new Vector(this.x / scalar, this.y / scalar);
     }
+
+    static vectorToAngle(vector: Vector): number {
+        const radians = Math.atan2(vector.getX, -vector.getY);
+        const degrees = radians * (180 / Math.PI);
+        const angle = (degrees + 360) % 360;
+        return angle;
+    }
 }

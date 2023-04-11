@@ -53,6 +53,14 @@ export default class Entity {
     return this.height;
   }
 
+  get getImage(): string {
+    return this.image;
+  }
+
+  set setImage(value: string) {
+    this.image = value;
+  }
+
   static checkCollision(entity1: Entity, entity2: Entity) {
     return (
       entity1.getLocation.getX <

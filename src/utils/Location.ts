@@ -1,10 +1,14 @@
+import {number} from "yargs";
+
 export default class Location {
     private x: number;
     private y: number;
+    private rotation: number;
 
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number, rotation: number = 0) {
         this.x = x;
         this.y = y;
+        this.rotation = rotation;
     }
 
     get getX(): number {
@@ -21,6 +25,14 @@ export default class Location {
 
     set setY(y: number) {
         this.y = y;
+    }
+
+    set setRotation(rotation: number) {
+        this.rotation = rotation;
+    }
+
+    get getRotation(): number {
+        return this.rotation;
     }
 
     public toString(): string {

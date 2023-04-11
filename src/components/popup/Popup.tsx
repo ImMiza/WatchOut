@@ -24,7 +24,8 @@ const Background: React.CSSProperties = {
     left: '0',
     top: '0',
     filter: 'opacity(0.4)',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+    zIndex: 9,
 };
 
 const Title: React.CSSProperties = {

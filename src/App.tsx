@@ -21,7 +21,7 @@ function App() {
   const spaceshipSize: number = 40;
   const centerX: number = (window.innerWidth / 2.0) - spaceshipSize;
   const centerY: number = (window.innerHeight / 2.0) - spaceshipSize;
-  const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '', spaceshipSize, spaceshipSize, true, 4));
+  const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
 
   const [meteors, setMeteors] = React.useState<Meteor[]>([]);
 
@@ -30,7 +30,7 @@ function App() {
    */
   function retry(): void {
     setMeteors([]);
-    setSpaceship(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '', spaceshipSize, spaceshipSize, true, 4));
+    setSpaceship(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
     setStart(true);
@@ -73,7 +73,7 @@ function App() {
     currentTimeBefore -= 1;
     if (currentTimeBefore <= 0) {
       currentTimeBefore = timeBeforeApparition
-      setMeteors((prev) => prev.concat(new Meteor(spaceship.getLocation, '', 40, 40)));
+      setMeteors((prev) => prev.concat(new Meteor(spaceship.getLocation, '/images/meteor.png', 40, 40)));
     }
   }
 

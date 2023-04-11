@@ -1,17 +1,15 @@
 import Location from "./Location";
 import Vector from "./Vector";
 import Entity from "./Entity";
-import { number } from "yargs";
 
 export default class Spaceship extends Entity {
     private isMoving: boolean;
-    private rotation: number;
+
     private rotationSpeed: number;
 
     constructor(location: Location, vector: Vector, image: string,  width: number, height: number, isMoving: boolean, rotationSpeed: number) {
         super(location, vector, image, width, height);
         this.isMoving = isMoving;
-        this.rotation = 0;
         this.rotationSpeed = rotationSpeed;
     }
 
@@ -23,14 +21,6 @@ export default class Spaceship extends Entity {
         return this.isMoving;
     }
 
-    public setRotation(rotation: number) {
-        this.rotation = rotation;
-    }
-
-    get getRotation(): number {
-        return this.rotation;
-    }
-
     set setRotationSpeed(rotationSpeed: number) {
         this.rotationSpeed = rotationSpeed;
     }
@@ -40,9 +30,9 @@ export default class Spaceship extends Entity {
     }
 
     startRotation(): Spaceship {
-        const currentRotation = this.getRotation;
+        const currentRotation = this.getLocation.getRotation;
         const newRotation = (currentRotation + this.rotationSpeed)%360;
-        this.setRotation(newRotation);
+        this.getLocation.setRotation = newRotation;
         return this;
     }
 
@@ -51,11 +41,11 @@ export default class Spaceship extends Entity {
             <div style={{
                 width: `${this.getWidth}px`,
                 height: `${this.getHeight}px`,
-                backgroundColor: 'red',
                 position: 'fixed',
                 left: `${this.getLocation.getX}px`,
                 top:  `${this.getLocation.getY}px`,
-                transform: `rotate(${this.getRotation}deg)`,
+                transform: `rotate(${this.getLocation.getRotation}deg)`,
+                background: `url('${this.getImage}')`
               }}>
             </div>
         )

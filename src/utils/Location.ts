@@ -7,19 +7,19 @@ export default class Location {
         this.y = y;
     }
 
-    public getX(): number {
+    get getX(): number {
         return this.x;
     }
 
-    public setX(x: number): void {
+    set setX(x: number) {
         this.x = x;
     }
 
-    public getY(): number {
+    get getY(): number {
         return this.y;
     }
 
-    public setY(y: number): void {
+    set setY(y: number) {
         this.y = y;
     }
 

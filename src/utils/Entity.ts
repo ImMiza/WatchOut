@@ -31,7 +31,7 @@ export default class Entity {
         this.vector = value;
     }
 
-    set setWidth(value: number): void {
+    set setWidth(value: number) {
         this.width = value;
     }
 
@@ -39,7 +39,7 @@ export default class Entity {
         return this.width;
     }
 
-    set setHeight(value: number): void {
+    set setHeight(value: number) {
         this.height = value;
     }
 

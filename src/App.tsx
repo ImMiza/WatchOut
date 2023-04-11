@@ -26,7 +26,11 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  return <div>{spaceship.getJsxSpaceship()}</div>;
+  return (
+      <div>
+        {spaceship.getJsxSpaceship()}
+      </div>
+  );
 }
 
 export default App;

@@ -4,15 +4,25 @@ import Entity from "./utils/Entity";
 import Spaceship from './utils/Spaceship';
 import Location from './utils/Location';
 import Timer from './components/settings/timer';
+import Popup from "./components/popup/Popup";
 
 function App() {
-  
-  const [spaceship, setSpaceship] = useState(new Spaceship(new Location(50,50), new Vector(0,0), '', 40, 40, true, 4));
+
+  const [isStart, setStart] = React.useState<boolean>(false);
+  const [isEnd, setEnd] = React.useState<boolean>(false);
+
+  const spaceshipSize: number = 40;
+  const centerX: number = (window.innerWidth / 2.0) - spaceshipSize;
+  const centerY: number = (window.innerHeight / 2.0) - spaceshipSize;
+  const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '', spaceshipSize, spaceshipSize, true, 4));
   /**
    * The main function
    * call 30 times per seconds (30fps)
    */
   function main(): void {
+    if(!isStart) {
+      return;
+    }
     setSpaceship(Object.create(spaceship.startRotation()));
   }
 
@@ -25,11 +35,14 @@ function App() {
     }, 1000 / 30);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isStart, isEnd]);
 
   return (
       <div>
-        <Timer></Timer>
+        {
+          !isStart &&
+            <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)} />
+        }
         {spaceship.getJsxSpaceship()}
       </div>
   );

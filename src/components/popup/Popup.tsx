@@ -14,6 +14,7 @@ const Container: React.CSSProperties = {
     boxShadow: 'rgba(0, 0, 0, 0.25) 5px 5px 0px',
     transform: 'translate(-50%, -50%)',
     alignItems: 'center',
+    zIndex: 10,
 };
 
 const Background: React.CSSProperties = {
@@ -59,7 +60,7 @@ function Popup(props: {
             <div style={Background}></div>
             <div style={Container}>
                 <p style={Title}>{props.title}</p>
-                <button onClick={() => props.onClick} style={Button}>{props.buttonText}</button>
+                <button onClick={() => props.onClick && props.onClick()} style={Button}>{props.buttonText}</button>
             </div>
         </>
     )

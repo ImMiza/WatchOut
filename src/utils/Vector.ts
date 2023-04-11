@@ -7,19 +7,19 @@ export default class Vector {
         this.y = y;
     }
 
-    public getX(): number {
+    get getX(): number {
         return this.x;
     }
 
-    public setX(x: number): void {
+    set setX(x: number) {
         this.x = x;
     }
 
-    public getY(): number {
+    get getY(): number {
         return this.y;
     }
 
-    public setY(y: number): void {
+    set setY(y: number) {
         this.y = y;
     }
 
@@ -28,11 +28,11 @@ export default class Vector {
     }
 
     public add(vector: Vector): Vector {
-        return new Vector(this.x + vector.getX(), this.y + vector.getY());
+        return new Vector(this.x + vector.getX, this.y + vector.getY);
     }
 
     public subtract(vector: Vector): Vector {
-        return new Vector(this.x - vector.getX(), this.y - vector.getY());
+        return new Vector(this.x - vector.getX, this.y - vector.getY);
     }
 
     public multiply(scalar: number): Vector {

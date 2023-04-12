@@ -3,12 +3,12 @@ import Location from "./Location";
 import Vector from "./Vector";
 
 export default class Meteor extends Entity {
-   constructor(targetLocation: Location, image: string, width: number, height: number) {
+   constructor(targetLocation: Location, image: string, width: number, height: number, speed: number = 4) {
        const location = Meteor.generateRandomPosition();
        const vector = Meteor.getVector(location, targetLocation);
        location.setRotation = Vector.vectorToAngle(vector);
        console.log(location.getRotation)
-       super(location, vector.multiply(4), image, width, height);
+       super(location, vector.multiply(speed), image, width, height);
    }
 
    get jsxElement(): JSX.Element {
@@ -34,8 +34,15 @@ export default class Meteor extends Entity {
    }
 
    static generateRandomPosition(): Location {
-      const randomX = Math.random() < 0.5 ? Math.random() * -100 : window.innerWidth + Math.random() * 100;
-      const randomY = Math.random() * window.innerHeight;
+       let randomX, randomY;
+       if(Math.random() > 0.5) {
+           randomX = Math.random() < 0.5 ? Math.random() * -100 : window.innerWidth + 100;
+           randomY = Math.random() * window.innerHeight;
+       }
+       else {
+           randomX = Math.random() * window.innerWidth;
+           randomY = Math.random() < 0.5 ? Math.random() * -100 : window.innerHeight + 100;
+       }
       return new Location(randomX, randomY);
    }
 

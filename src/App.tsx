@@ -7,6 +7,7 @@ import Timer, {timervalue} from './components/settings/timer';
 import Popup from "./components/popup/Popup";
 import Scoreboard from "./components/popup/Scoreboard";
 import Meteor from "./utils/Meteor";
+import MusicPlayer, { Music } from "./utils/MusicPlayer";
 import Modal from "./components/Modal";
 
 
@@ -15,6 +16,9 @@ function App() {
 
   const [isStart, setStart] = React.useState<boolean>(false);
   const [isEnd, setEnd] = React.useState<boolean>(false);
+  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.nomusic);
+  const [isLoop, setLoop] = React.useState<boolean>(true);
+
 
   let timeBeforeApparition = 60;
   let currentTimeBefore = timeBeforeApparition;
@@ -59,6 +63,7 @@ function App() {
     );
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
+    setCurrentMusic(Music.musique);
     setStart(true);
     setEnd(false);
   }
@@ -69,6 +74,7 @@ function App() {
   function updateMeteors(): void {
     setMeteors((prev) => prev.map(m => {
       if (Entity.checkCollision(m, spaceship)) {
+        setCurrentMusic(Music.explosion);
         setEnd(true);
         setStart(false);
       }
@@ -193,6 +199,7 @@ function App() {
       )}
       {spaceship.getJsxSpaceship()}
       {meteors.map((m) => m.jsxElement)}
+      <MusicPlayer music={currentMusic} loop={false} />
     </div>
   );
 }

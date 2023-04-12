@@ -163,7 +163,9 @@ function App() {
 
   return (
     <div>
-      <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
+      <h1>
+        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
+      </h1>
       {!isStart && (
         <div>
           <div className="background">
@@ -196,10 +198,24 @@ function App() {
             <form>
               <div className="pen-intro">
                 <h1>Game Over</h1>
-                <p>
-                  Your Score : {timer?.minutes}min {timer?.seconds}s{" "}
-                  {timer?.milliseconds}ms
-                </p>
+              </div>
+              <p>
+                Your Score : {timer?.minutes}min {timer?.seconds}s{" "}
+                {timer?.milliseconds}ms
+              </p>
+              <div className="container btn">
+                <button
+                  className="eightbit-btn eightbit-btn--proceed"
+                  onClick={() => retry()}
+                >
+                  Save
+                </button>
+                <button
+                  className="eightbit-btn eightbit-btn--proceed"
+                  onClick={() => retry()}
+                >
+                  list score
+                </button>
               </div>
               <button
                 className="eightbit-btn eightbit-btn--proceed"

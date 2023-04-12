@@ -7,6 +7,7 @@ import Timer, {timervalue} from './components/settings/timer';
 import Popup from "./components/popup/Popup";
 import Scoreboard from "./components/popup/Scoreboard";
 import Meteor from "./utils/Meteor";
+import MusicPlayer, { Music } from "./utils/MusicPlayer";
 import Modal from "./components/Modal";
 
 
@@ -15,6 +16,9 @@ function App() {
 
   const [isStart, setStart] = React.useState<boolean>(false);
   const [isEnd, setEnd] = React.useState<boolean>(false);
+  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.nomusic);
+  const [isLoop, setLoop] = React.useState<boolean>(true);
+
 
   let timeBeforeApparition = 60;
   let currentTimeBefore = timeBeforeApparition;
@@ -59,6 +63,7 @@ function App() {
     );
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
+    setCurrentMusic(Music.musique);
     setStart(true);
     setEnd(false);
   }
@@ -69,6 +74,7 @@ function App() {
   function updateMeteors(): void {
     setMeteors((prev) => prev.map(m => {
       if (Entity.checkCollision(m, spaceship)) {
+        setCurrentMusic(Music.explosion);
         setEnd(true);
         setStart(false);
       }
@@ -164,36 +170,55 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} ></Timer>
-      {!isStart && (
-        <Popup
-          title={"Watch out !"}
-          buttonText={"Start"}
-          onClick={() => setStart(true)}
-        />
-      )}
-      {isEnd && (
-        <>
-          <Popup
-            title={"Game over !"}
-            buttonText={"Retry"}
-            onClick={() => retry()}
-          />
-          <Scoreboard
-            title={"Votre score : 1 min 30 sec"}
-            buttonText={"Save Score"}
-            buttonList={"List of score"}
-            onClickSave={() => {
-              setOpenModal(true);
-            }}
-          />
-          {openModal && <Modal closeModal={setOpenModal} />}
-        </>
-      )}
-      {spaceship.getJsxSpaceship()}
-      {meteors.map((m) => m.jsxElement)}
-    </div>
+      <div>
+        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
+        {
+          !isStart &&
+            <div>
+              <div className="background">
+              <div className="shape1"></div>
+              <div className="shape2"></div>
+              </div>
+              <form>
+                <div className="pen-intro">
+                  <h1>Watch Out</h1>
+                </div>
+                <button className="eightbit-btn" onClick={() => setStart(true)} >Play Game</button>
+                <button className="eightbit-btn eightbit-btn--proceed">Setting</button>
+                <button className="eightbit-btn eightbit-btn--reset">Information</button>
+              </form>
+            </div>
+        }
+        {
+          isEnd &&
+            <>
+              <div>
+                <div className="background">
+                  <div className="shape1"></div>
+                  <div className="shape2"></div>
+                </div>
+                <form>
+                  <div className="pen-intro">
+                    <h1>Game Over</h1>
+                  </div>
+                  <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >Try again</button>
+                  <a className="eightbit-btn eightbit-btn--reset">Return</a>
+                </form>
+              </div>
+              <Scoreboard
+                  title={"Votre score : 1 min 30 sec"}
+                  buttonText={"Save Score"}
+                  buttonList={"List of score"}
+                  onClickSave={() => {
+                    setOpenModal(true);
+                  }}
+              />
+            </>
+        }
+        {spaceship.getJsxSpaceship()}
+        {meteors.map(m => m.jsxElement)}
+        <MusicPlayer music={currentMusic} loop={false} />
+      </div>
   );
 }
 

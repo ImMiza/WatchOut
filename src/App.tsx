@@ -185,6 +185,7 @@ function App() {
       <h1>
         <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
       </h1>
+      {openModalList && <ModalList closeModal={setOpenModalList} />}
       {!isStart && (
         <div>
           <div className="background">
@@ -207,7 +208,7 @@ function App() {
             <button className="eightbit-btn eightbit-btn--proceed" onClick={() => setOpenSetting(true)} >
               Setting
             </button>
-            <button className="eightbit-btn eightbit-btn--reset">Score</button>
+            <button className="eightbit-btn eightbit-btn--reset" onClick={() => setOpenModalList(true)}>Score</button>
           </div>
         </div>
       )}
@@ -236,8 +237,7 @@ function App() {
                 Your Score : {timer?.minutes}min {timer?.seconds}s{" "}
                 {timer?.milliseconds}ms
               </p>
-              {openModal && <Modal closeModal={setOpenModal} />}
-              {openModalList && <ModalList closeModal={setOpenModalList} />}
+              {openModal && timer && <Modal closeModal={setOpenModal} timer={timer} />}
               <div className="container-btn">
                 <button
                   className="eightbit-btn eightbit-btn--proceed"

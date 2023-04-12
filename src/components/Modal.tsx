@@ -1,4 +1,6 @@
 import React from "react";
+import {postScore} from "../data/Data";
+import {timervalue} from "./settings/timer";
 
 const Background: React.CSSProperties = {
   width: "600px",
@@ -19,7 +21,11 @@ const Background: React.CSSProperties = {
 
 const Body: React.CSSProperties = {};
 
-function Modal({ closeModal }: { closeModal: any }) {
+function Modal({ closeModal, timer }: { closeModal: (value: boolean) => void, timer: timervalue }) {
+
+    const [username, setUsername] = React.useState('');
+    const [isLoading, setLoading] = React.useState<boolean>(false);
+
   return (
     <div style={Background}>
       <h1>Save your score ! </h1>
@@ -30,13 +36,23 @@ function Modal({ closeModal }: { closeModal: any }) {
             className="eightbit-btn eightbit-btn--input"
             type="text"
             name="name"
+            maxLength={5}
+            onChange={(value) => setUsername(value.target.value.trim())}
           />
-          <input className="eightbit-btn" type="submit" value="Envoyer" />
+          <input className="eightbit-btn" type="button" value="Envoyer" onClick={() => {
+              setLoading(true);
+              postScore({name: username, score: timer.time})
+                  .then(r => {
+                      setLoading(false);
+                      closeModal(false);
+                  });
+          }} />
         </form>
       </div>
       <button
+          type='button'
         className="eightbit-btn eightbit-btn--reset"
-        onClick={() => closeModal(false)}
+        onClick={() => closeModal(false) }
       >
         Return
       </button>

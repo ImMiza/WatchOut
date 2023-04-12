@@ -13,7 +13,7 @@ export default class Spaceship extends Entity {
         this.rotationSpeed = rotationSpeed;
     }
 
-    set setIsMoving(isMoving: boolean) {
+    public setIsMoving(isMoving: boolean) {
         this.isMoving = isMoving;
     }
 
@@ -30,15 +30,63 @@ export default class Spaceship extends Entity {
     }
 
     startRotation(): Spaceship {
-        const currentRotation = this.getLocation.getRotation;
-        const newRotation = (currentRotation + this.rotationSpeed)%360;
-        this.getLocation.setRotation = newRotation;
+        if(this.getIsMoving === true) {
+            const currentRotation = this.getLocation.getRotation;
+            const newRotation = (currentRotation + this.rotationSpeed)%360;
+            this.getLocation.setRotation = newRotation;
+        }
         return this;
+    }
+
+    angleToVector(angle: number): Vector {
+        const radians = angle * (Math.PI / 180);
+        const x = Number.parseFloat(Math.sin(radians).toFixed(3));
+        const y = Number.parseFloat(Math.cos(radians).toFixed(3));
+        return new Vector(x, -y);
+    }
+
+    displacement(angle: number, distance: number){
+    
+      const directionVector = this.angleToVector(angle);
+      const displacementVector = directionVector.multiply(distance);
+      console.log(distance, directionVector ,displacementVector.toString());
+      const currentX = this.getLocation.getX;
+      const currentY = this.getLocation.getY;
+      console.log('current:', currentX, currentY);
+      this.getLocation.setX = currentX + displacementVector.getX;
+      this.getLocation.setY = currentY + displacementVector.getY;
+    }
+
+    screenLimit(location: Location) {
+        var bordSupérieur = window.innerHeight;
+         // Vérifier si le carré atteint le bord supérieur ou inférieur de l'écran
+        if (location.getY  > bordSupérieur) {
+            // Si le carré dépasse le bord inférieur, le ramener à la position du bord supérieur
+            location.setY = 1;
+        } else if (location.getY  < 0) {
+            // Si le carré dépasse le bord supérieur, le ramener à la position du bord inférieur
+            location.setY = bordSupérieur;
+        }
+        var largeurEcran = window.innerWidth;
+        // Coordonnées du bord gauche de l'écran
+        var bordGaucheEcran = 0;
+        // Coordonnées du bord droit de l'écran
+        var bordDroitEcran = largeurEcran
+        if (location.getX > bordDroitEcran) {
+            // Si le carré dépasse le bord inférieur, le ramener à la position du bord supérieur
+            location.setX = 1;
+        } else if (location.getX  < bordGaucheEcran) {
+            // Si le carré dépasse le bord supérieur, le ramener à la position du bord inférieur
+            location.setX = bordSupérieur;
+        }
     }
 
     getJsxSpaceship():JSX.Element {
         return (
-            <div style={{
+            <div
+                id="spaceship" 
+                style={{
+                transition: 'left 0.3s, top 0.3s',
                 width: `${this.getWidth}px`,
                 height: `${this.getHeight}px`,
                 position: 'fixed',

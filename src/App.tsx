@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Vector from "./utils/Vector";
 import Entity from "./utils/Entity";
 import Spaceship from "./utils/Spaceship";
 import Location from "./utils/Location";
-import Timer, { timervalue } from "./components/settings/timer";
-import Popup from "./components/popup/Popup";
-import Scoreboard from "./components/popup/Scoreboard";
+import Timer, {timervalue} from "./components/settings/timer";
 import Meteor from "./utils/Meteor";
-import MusicPlayer, { Music } from "./utils/MusicPlayer";
+import MusicPlayer, {Music} from "./utils/MusicPlayer";
 import Modal from "./components/Modal";
 import ModalList from "./components/ModalList";
 import Settings from "./utils/Settings";
-import Setting, {SettingParameters} from "./components/settings/Setting";
+import Setting from "./components/settings/Setting";
+import ReactAudioPlayer from "react-audio-player";
 
 function App() {
   const [isStart, setStart] = React.useState<boolean>(false);
   const [isEnd, setEnd] = React.useState<boolean>(false);
-  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.musique);
+  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.nomusic);
   const [isLoop, setLoop] = React.useState<boolean>(true);
 
   const [isOpenSetting, setOpenSetting] = React.useState<boolean>(false);
@@ -69,6 +68,7 @@ function App() {
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
     if(Settings.isSoundAllow()) {
+      setLoop(true);
       setCurrentMusic(Music.musique);
     }
     setStart(true);
@@ -83,6 +83,7 @@ function App() {
       prev.map((m) => {
         if (Entity.checkCollision(m, spaceship)) {
           if(Settings.isSoundAllow()) {
+            setLoop(false);
             setCurrentMusic(Music.explosion);
           }
           setEnd(true);
@@ -194,7 +195,13 @@ function App() {
             <div className="pen-intro">
               <h1>Watch Out</h1>
             </div>
-            <button className="eightbit-btn" onClick={() => setStart(true)}>
+            <button className="eightbit-btn" onClick={() => {
+              setStart(true);
+              if (Settings.isSoundAllow()) {
+                setLoop(true);
+                setCurrentMusic(Music.musique);
+              }
+            }}>
               Play Game
             </button>
             <button className="eightbit-btn eightbit-btn--proceed" onClick={() => setOpenSetting(true)} >
@@ -258,7 +265,7 @@ function App() {
       )}
       {spaceship.getJsxSpaceship()}
       {meteors.map((m) => m.jsxElement)}
-      <MusicPlayer music={currentMusic} loop={false} />
+      <MusicPlayer music={currentMusic} loop={isLoop} />
     </div>
   );
 }

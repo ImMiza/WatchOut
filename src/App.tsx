@@ -110,6 +110,22 @@ function App() {
     return () => clearInterval(interval);
   }, [isStart, isEnd]);
 
+  useEffect(() => {
+    
+    document.addEventListener("keydown", (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+         if(spaceship.getIsMoving === true){
+            spaceship.setIsMoving(false);
+            spaceship.displacement(spaceship.getLocation.getRotation , 30);
+            spaceship.screenLimit(spaceship.getLocation)
+            spaceship.setIsMoving(true);
+            return;
+         }
+      }
+    });
+    
+  }, []);
+
   return (
       <div>
         {

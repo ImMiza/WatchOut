@@ -23,8 +23,21 @@ function App() {
   let timeBeforeApparition = 60;
   let currentTimeBefore = timeBeforeApparition;
 
-  const cleanMeteors = 240;
+  const cleanMeteors = 300;
   let currentCleanMeteors = cleanMeteors;
+
+  let meteorSpeed = 4;
+  const riseDifficult = 90;
+  let currentRiseDifficult = riseDifficult;
+
+  function riseLevel(): void {
+    currentRiseDifficult -= 1;
+    if(currentRiseDifficult <= 0) {
+      currentRiseDifficult = riseDifficult;
+      timeBeforeApparition -= 3;
+      meteorSpeed += 0.5;
+    }
+  }
 
   const spaceshipSize: number = 40;
   const centerX: number = window.innerWidth / 2.0 - spaceshipSize;
@@ -112,11 +125,12 @@ function App() {
       currentTimeBefore = timeBeforeApparition;
       setMeteors((prev) =>
         prev.concat(
-          new Meteor(spaceship.getLocation, "/images/meteor.png", 40, 40)
+          new Meteor(spaceship.getLocation, "/images/meteor.png", 40, 40, (Math.random() * ((meteorSpeed + 2) - (meteorSpeed - 2) + 1) + (meteorSpeed - 2)))
         )
       );
     }
   }
+
 
   /**
    * The main function
@@ -134,6 +148,7 @@ function App() {
     setSpaceship(Object.create(spaceship.startRotation()));
     cleanMeteor();
     updateAddMeteor();
+    riseLevel();
   }
 
   const [openModal, setOpenModal] = useState(false);

@@ -17,18 +17,6 @@ const Background: React.CSSProperties = {
   zIndex: 10,
 };
 
-const Button: React.CSSProperties = {
-  background: "black",
-  boxShadow: "10px 10px 4px rgba(0, 0, 0, 0.25)",
-  borderRadius: "70px",
-  borderColor: "black",
-  outline: "none",
-  width: "100px",
-  height: "50px",
-  cursor: "pointer",
-  color: "white",
-};
-
 const Body: React.CSSProperties = {};
 
 function Modal({ closeModal }: { closeModal: any }) {

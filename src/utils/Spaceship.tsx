@@ -29,30 +29,27 @@ export default class Spaceship extends Entity {
         return this.rotationSpeed;
     }
 
-    startRotation(): Spaceship {
-        if(this.getIsMoving === true) {
-            const currentRotation = this.getLocation.getRotation;
-            const newRotation = (currentRotation + this.rotationSpeed)%360;
-            this.getLocation.setRotation = newRotation;
-        }
+    changeImage(value: string): Spaceship {
+        this.setImage = value;
         return this;
     }
 
-    angleToVector(angle: number): Vector {
-        const radians = angle * (Math.PI / 180);
-        const x = Number.parseFloat(Math.sin(radians).toFixed(3));
-        const y = Number.parseFloat(Math.cos(radians).toFixed(3));
-        return new Vector(x, -y);
+    startRotation(): Location {
+        if(this.getIsMoving === true) {
+            const currentRotation = this.getLocation.getRotation;
+            const newRotation = (currentRotation + this.rotationSpeed)%360;
+            return new Location(this.getLocation.getX, this.getLocation.getY, newRotation);
+        }
+        return Object.create(this.getLocation);
     }
 
+
+
     displacement(angle: number, distance: number){
-    
-      const directionVector = this.angleToVector(angle);
+      const directionVector = Vector.angleToVector(angle);
       const displacementVector = directionVector.multiply(distance);
-      console.log(distance, directionVector ,displacementVector.toString());
       const currentX = this.getLocation.getX;
       const currentY = this.getLocation.getY;
-      console.log('current:', currentX, currentY);
       this.getLocation.setX = currentX + displacementVector.getX;
       this.getLocation.setY = currentY + displacementVector.getY;
     }
@@ -81,21 +78,23 @@ export default class Spaceship extends Entity {
         }
     }
 
-    getJsxSpaceship():JSX.Element {
+    getJsxSpaceship(): JSX.Element {
         return (
-            <div
-                id="spaceship" 
+            <img
+                src={this.getImage}
                 style={{
-                transition: 'left 0.3s, top 0.3s',
-                width: `${this.getWidth}px`,
-                height: `${this.getHeight}px`,
-                position: 'fixed',
-                left: `${this.getLocation.getX}px`,
-                top:  `${this.getLocation.getY}px`,
-                transform: `rotate(${this.getLocation.getRotation}deg)`,
-                background: `url('${this.getImage}')`
-              }}>
-            </div>
+                    transition: 'left 0.3s, top 0.3s',
+                    width: `${this.getWidth}px`,
+                    height: `${this.getHeight}px`,
+                    position: 'fixed',
+                    left: `${this.getLocation.getX}px`,
+                    top:  `${this.getLocation.getY}px`,
+                    transform: `rotate(${this.getLocation.getRotation}deg)`,
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'initial',
+                    backgroundSize: 'cover'
+                }}
+            />
         )
     }
 }

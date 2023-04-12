@@ -7,7 +7,6 @@ export default class Meteor extends Entity {
        const location = Meteor.generateRandomPosition();
        const vector = Meteor.getVector(location, targetLocation);
        location.setRotation = Vector.vectorToAngle(vector);
-       console.log(location.getRotation)
        super(location, vector.multiply(speed), image, width, height);
    }
 

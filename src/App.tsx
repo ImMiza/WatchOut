@@ -10,12 +10,16 @@ import Meteor from "./utils/Meteor";
 import MusicPlayer, { Music } from "./utils/MusicPlayer";
 import Modal from "./components/Modal";
 import ModalList from "./components/ModalList";
+import Settings from "./utils/Settings";
+import Setting, {SettingParameters} from "./components/settings/Setting";
 
 function App() {
   const [isStart, setStart] = React.useState<boolean>(false);
   const [isEnd, setEnd] = React.useState<boolean>(false);
-  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.nomusic);
+  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.musique);
   const [isLoop, setLoop] = React.useState<boolean>(true);
+
+  const [isOpenSetting, setOpenSetting] = React.useState<boolean>(false);
 
   let timeBeforeApparition = 60;
   let currentTimeBefore = timeBeforeApparition;
@@ -43,7 +47,7 @@ function App() {
     new Spaceship(
       new Location(centerX, centerY),
       new Vector(0, 0),
-      "/images/rocket.svg",
+      Settings.getSpaceshipModel(),
       spaceshipSize,
       spaceshipSize,
       true,
@@ -60,20 +64,13 @@ function App() {
    */
   function retry(): void {
     setMeteors([]);
-    setSpaceship(
-      new Spaceship(
-        new Location(centerX, centerY),
-        new Vector(0, 0),
-        "/images/rocket.svg",
-        spaceshipSize,
-        spaceshipSize,
-        true,
-        4
-      )
-    );
+    spaceship.setLocation = new Location(centerX, centerY);
+    spaceship.setVector = new Vector(0, 0);
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
-    setCurrentMusic(Music.musique);
+    if(Settings.isSoundAllow()) {
+      setCurrentMusic(Music.musique);
+    }
     setStart(true);
     setEnd(false);
   }
@@ -85,7 +82,9 @@ function App() {
     setMeteors((prev) =>
       prev.map((m) => {
         if (Entity.checkCollision(m, spaceship)) {
-          setCurrentMusic(Music.explosion);
+          if(Settings.isSoundAllow()) {
+            setCurrentMusic(Music.explosion);
+          }
           setEnd(true);
           setStart(false);
         }
@@ -124,7 +123,7 @@ function App() {
       currentTimeBefore = timeBeforeApparition;
       setMeteors((prev) =>
         prev.concat(
-          new Meteor(spaceship.getLocation, "/images/meteor.png", 40, 40, (Math.random() * ((meteorSpeed + 2) - (meteorSpeed - 2) + 1) + (meteorSpeed - 2)))
+          new Meteor(spaceship.getLocation, Settings.getMeteorModel(), 40, 40, (Math.random() * ((meteorSpeed + 2) - (meteorSpeed - 2) + 1) + (meteorSpeed - 2)))
         )
       );
     }
@@ -144,7 +143,9 @@ function App() {
       return;
     }
     updateMeteors();
-    setSpaceship(Object.create(spaceship.startRotation()));
+
+    spaceship.setLocation = spaceship.startRotation();
+
     cleanMeteor();
     updateAddMeteor();
     riseLevel();
@@ -167,7 +168,7 @@ function App() {
   useEffect(() => {
     document.addEventListener("keydown", (event: KeyboardEvent) => {
       if (event.code === "Space") {
-        if (spaceship.getIsMoving === true) {
+        if (spaceship.getIsMoving) {
           spaceship.setIsMoving(false);
           spaceship.displacement(spaceship.getLocation.getRotation, 30);
           spaceship.screenLimit(spaceship.getLocation);
@@ -196,13 +197,23 @@ function App() {
             <button className="eightbit-btn" onClick={() => setStart(true)}>
               Play Game
             </button>
-            <button className="eightbit-btn eightbit-btn--proceed">
+            <button className="eightbit-btn eightbit-btn--proceed" onClick={() => setOpenSetting(true)} >
               Setting
             </button>
             <button className="eightbit-btn eightbit-btn--reset">Score</button>
           </div>
         </div>
       )}
+      {
+        isOpenSetting &&
+          <Setting onSave={(value) => {
+            setOpenSetting(false);
+            Settings.setMeteorModel(value.meteorModel);
+            Settings.setSpaceshipModel(value.spaceshipModel);
+            Settings.setSoundAllow(value.allowSound);
+            spaceship.setImage = value.spaceshipModel;
+          }} />
+      }
       {isEnd && (
         <>
           <div>

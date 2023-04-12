@@ -49,4 +49,11 @@ export default class Vector {
         const angle = (degrees + 360) % 360;
         return angle;
     }
+
+    static angleToVector(angle: number): Vector {
+        const radians = angle * (Math.PI / 180);
+        const x = Number.parseFloat(Math.sin(radians).toFixed(3));
+        const y = Number.parseFloat(Math.cos(radians).toFixed(3));
+        return new Vector(x, -y);
+    }
 }

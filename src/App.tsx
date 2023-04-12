@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Vector from "./utils/Vector";
 import Entity from "./utils/Entity";
-import Spaceship from './utils/Spaceship';
+import Spaceship from "./utils/Spaceship";
 import Location from './utils/Location';
-import Timer from './components/settings/timer';
+import Timer, {timervalue} from './components/settings/timer';
 import Popup from "./components/popup/Popup";
+import Scoreboard from "./components/popup/Scoreboard";
 import Meteor from "./utils/Meteor";
 import MusicPlayer, { Music } from "./utils/MusicPlayer";
+import Modal from "./components/Modal";
+
+
 
 function App() {
 
@@ -23,17 +27,40 @@ function App() {
   let currentCleanMeteors = cleanMeteors;
 
   const spaceshipSize: number = 40;
-  const centerX: number = (window.innerWidth / 2.0) - spaceshipSize;
-  const centerY: number = (window.innerHeight / 2.0) - spaceshipSize;
-  const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
+  const centerX: number = window.innerWidth / 2.0 - spaceshipSize;
+  const centerY: number = window.innerHeight / 2.0 - spaceshipSize;
+  const [spaceship, setSpaceship] = useState(
+    new Spaceship(
+      new Location(centerX, centerY),
+      new Vector(0, 0),
+      "/images/rocket.svg",
+      spaceshipSize,
+      spaceshipSize,
+      true,
+      4
+    )
+  );
+
   const [meteors, setMeteors] = React.useState<Meteor[]>([]);
+
+  const [timer, setTimer] = React.useState<timervalue>();
 
   /**
    * Retry the game
    */
   function retry(): void {
     setMeteors([]);
-    setSpaceship(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
+    setSpaceship(
+      new Spaceship(
+        new Location(centerX, centerY),
+        new Vector(0, 0),
+        "/images/rocket.svg",
+        spaceshipSize,
+        spaceshipSize,
+        true,
+        4
+      )
+    );
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
     setCurrentMusic(Music.musique);
@@ -49,6 +76,7 @@ function App() {
       if (Entity.checkCollision(m, spaceship)) {
         setCurrentMusic(Music.explosion);
         setEnd(true);
+        setStart(false);
       }
       m.move();
       return m;
@@ -62,12 +90,16 @@ function App() {
     currentCleanMeteors -= 1;
     if (currentCleanMeteors <= 0) {
       currentCleanMeteors = cleanMeteors;
-      setMeteors((prev) => prev.filter(m => {
-        return !(m.getLocation.getX < 0
-            || m.getLocation.getX > window.innerWidth
-            || m.getLocation.getY > window.innerHeight
-            || (m.getLocation.getY + m.getHeight) < 0)
-      }));
+      setMeteors((prev) =>
+        prev.filter((m) => {
+          return !(
+            m.getLocation.getX < 0 ||
+            m.getLocation.getX > window.innerWidth ||
+            m.getLocation.getY > window.innerHeight ||
+            m.getLocation.getY + m.getHeight < 0
+          );
+        })
+      );
     }
   }
 
@@ -77,8 +109,12 @@ function App() {
   function updateAddMeteor(): void {
     currentTimeBefore -= 1;
     if (currentTimeBefore <= 0) {
-      currentTimeBefore = timeBeforeApparition
-      setMeteors((prev) => prev.concat(new Meteor(spaceship.getLocation, '/images/meteor.png', 40, 40)));
+      currentTimeBefore = timeBeforeApparition;
+      setMeteors((prev) =>
+        prev.concat(
+          new Meteor(spaceship.getLocation, "/images/meteor.png", 40, 40)
+        )
+      );
     }
   }
 
@@ -87,11 +123,11 @@ function App() {
    * call 30 times per seconds (30fps)
    */
   function main(): void {
-    if(!isStart) {
+    if (!isStart) {
       return;
     }
 
-    if(isEnd) {
+    if (isEnd) {
       return;
     }
     updateMeteors();
@@ -100,7 +136,9 @@ function App() {
     updateAddMeteor();
   }
 
-   /**
+  const [openModal, setOpenModal] = useState(false);
+
+  /**
    * don't touch
    */
   useEffect(() => {
@@ -111,15 +149,67 @@ function App() {
     return () => clearInterval(interval);
   }, [isStart, isEnd]);
 
+  useEffect(() => {
+
+    document.addEventListener("keydown", (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+         if(spaceship.getIsMoving === true){
+            spaceship.setIsMoving(false);
+            spaceship.displacement(spaceship.getLocation.getRotation , 30);
+            spaceship.screenLimit(spaceship.getLocation)
+            spaceship.setIsMoving(true);
+            return;
+         }
+      }
+    });
+
+  }, []);
+
   return (
       <div>
+        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
         {
           !isStart &&
-            <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)}/>
+            <div>
+              <div className="background">
+              <div className="shape1"></div>
+              <div className="shape2"></div>
+              </div>
+              <form>
+                <div className="pen-intro">
+                  <h1>Watch Out</h1>
+                </div>
+                <button className="eightbit-btn" onClick={() => setStart(true)} >Play Game</button>
+                <button className="eightbit-btn eightbit-btn--proceed">Setting</button>
+                <button className="eightbit-btn eightbit-btn--reset">Information</button>
+              </form>
+            </div>
         }
         {
           isEnd &&
-            <Popup title={'Game over !'} buttonText={'Retry'} onClick={() => retry()} />
+            <>
+              <div>
+                <div className="background">
+                  <div className="shape1"></div>
+                  <div className="shape2"></div>
+                </div>
+                <form>
+                  <div className="pen-intro">
+                    <h1>Game Over</h1>
+                  </div>
+                  <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >Try again</button>
+                  <a className="eightbit-btn eightbit-btn--reset">Return</a>
+                </form>
+              </div>
+              <Scoreboard
+                  title={"Votre score : 1 min 30 sec"}
+                  buttonText={"Save Score"}
+                  buttonList={"List of score"}
+                  onClickSave={() => {
+                    setOpenModal(true);
+                  }}
+              />
+            </>
         }
         {spaceship.getJsxSpaceship()}
         {meteors.map(m => m.jsxElement)}

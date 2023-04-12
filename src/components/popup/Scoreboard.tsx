@@ -2,12 +2,12 @@ import React from "react";
 
 const Container: React.CSSProperties = {
   width: "600px",
-  height: "250px",
-  backgroundColor: "#EB2489",
-  borderRadius: "20px",
+  height: "125px",
+  backgroundColor: "#384454",
+  borderRadius: "10px",
   position: "fixed",
   left: "50%",
-  top: "50%",
+  top: "75%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
@@ -29,13 +29,13 @@ const Background: React.CSSProperties = {
 };
 
 const Title: React.CSSProperties = {
-  fontFamily: "Joti One",
+  fontFamily: "Menlo",
   fontStyle: "normal",
   fontWeight: "400",
-  fontSize: "60px",
-  lineHeight: "128px",
-  textAlign: "center",
-  color: "#000000",
+  fontSize: "30px",
+  lineHeight: "55px",
+  textAlign: "left",
+  color: "white",
   textShadow: "rgba(0, 0, 0, 0.25) 4px 4px 0px",
 };
 
@@ -45,28 +45,47 @@ const Button: React.CSSProperties = {
   borderRadius: "70px",
   borderColor: "black",
   outline: "none",
-  width: "40%",
-  height: "25%",
+  width: "100px",
+  height: "50px",
   cursor: "pointer",
   color: "white",
 };
 
-function Popup(props: {
+const ContainerButton: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-around",
+};
+
+function Scoreboard(props: {
   title: string;
   buttonText: string;
-  onClick?: () => void;
+  buttonList: string;
+  onClickSave?: () => void;
+  onClickList?: () => void;
 }): JSX.Element {
   return (
     <>
       <div style={Background}></div>
       <div style={Container}>
         <p style={Title}>{props.title}</p>
-        <button onClick={() => props.onClick && props.onClick()} style={Button}>
-          {props.buttonText}
-        </button>
+        <div style={ContainerButton}>
+          <button
+            onClick={() => props.onClickSave && props.onClickSave()}
+            style={Button}
+          >
+            {props.buttonText}
+          </button>
+          <button
+            onClick={() => props.onClickList && props.onClickList()}
+            style={Button}
+          >
+            {props.buttonList}
+          </button>
+        </div>
       </div>
     </>
   );
 }
 
-export default Popup;
+export default Scoreboard;

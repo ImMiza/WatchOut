@@ -49,6 +49,10 @@ function Modal({ closeModal, timer }: { closeModal: (value: boolean) => void, ti
           }} />
         </form>
       </div>
+        {
+            isLoading &&
+            <p>Loading...</p>
+        }
       <button
           type='button'
         className="eightbit-btn eightbit-btn--reset"

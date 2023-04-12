@@ -115,11 +115,36 @@ function App() {
       <div>
         {
           !isStart &&
-            <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)}/>
+            <div>
+              <div className="background">
+              <div className="shape1"></div>
+              <div className="shape2"></div>
+              </div>
+              <form>
+                <div className="pen-intro">
+                  <h1>Watch Out</h1>
+                </div>      
+                <button className="eightbit-btn" onClick={() => setStart(true)} >Play Game</button>
+                <button className="eightbit-btn eightbit-btn--proceed">Setting</button>
+                <button className="eightbit-btn eightbit-btn--reset">Information</button>
+              </form>
+            </div>
         }
         {
           isEnd &&
-            <Popup title={'Game over !'} buttonText={'Retry'} onClick={() => retry()} />
+            <div>
+              <div className="background">
+              <div className="shape1"></div>
+              <div className="shape2"></div>
+              </div>
+              <form>
+                <div className="pen-intro">
+                  <h1>Game Over</h1>
+                </div>      
+                <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >Try again</button>
+                <a className="eightbit-btn eightbit-btn--reset">Return</a>
+              </form>
+            </div>
         }
         {spaceship.getJsxSpaceship()}
         {meteors.map(m => m.jsxElement)}

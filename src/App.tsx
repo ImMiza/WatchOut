@@ -3,7 +3,7 @@ import Vector from "./utils/Vector";
 import Entity from "./utils/Entity";
 import Spaceship from "./utils/Spaceship";
 import Location from './utils/Location';
-import Timer from './components/settings/timer';
+import Timer, {timervalue} from './components/settings/timer';
 import Popup from "./components/popup/Popup";
 import Meteor from "./utils/Meteor";
 
@@ -26,6 +26,7 @@ function App() {
   const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
   const [meteors, setMeteors] = React.useState<Meteor[]>([]);
 
+  const [timer, setTimer] = React.useState<timervalue>();
  
   /**
    * Retry the game
@@ -46,6 +47,7 @@ function App() {
     setMeteors((prev) => prev.map(m => {
       if (Entity.checkCollision(m, spaceship)) {
         setEnd(true);
+        setStart(false);
       }
       m.move();
       return m;
@@ -122,9 +124,7 @@ function App() {
           !isStart &&
             <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)} />
         }
-         {
-          isStart && <Timer timer_on={isStart} on_timer_end={(value)=>console.log(value)} ></Timer>
-         }
+        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} ></Timer>
         {
           isEnd &&
             <Popup title={'Game over !'} buttonText={'Retry'} onClick={() => retry()} />

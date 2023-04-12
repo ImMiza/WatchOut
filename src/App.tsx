@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Vector from "./utils/Vector";
 import Entity from "./utils/Entity";
 import Spaceship from "./utils/Spaceship";
-import Location from './utils/Location';
-import Timer, {timervalue} from './components/settings/timer';
+import Location from "./utils/Location";
+import Timer, { timervalue } from "./components/settings/timer";
 import Popup from "./components/popup/Popup";
 import Scoreboard from "./components/popup/Scoreboard";
 import Meteor from "./utils/Meteor";
@@ -13,7 +13,6 @@ import Modal from "./components/Modal";
 
 
 function App() {
-
   const [isStart, setStart] = React.useState<boolean>(false);
   const [isEnd, setEnd] = React.useState<boolean>(false);
   const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.nomusic);
@@ -165,19 +164,17 @@ function App() {
   }, [isStart, isEnd]);
 
   useEffect(() => {
-
     document.addEventListener("keydown", (event: KeyboardEvent) => {
       if (event.code === "Space") {
-         if(spaceship.getIsMoving === true){
-            spaceship.setIsMoving(false);
-            spaceship.displacement(spaceship.getLocation.getRotation , 30);
-            spaceship.screenLimit(spaceship.getLocation)
-            spaceship.setIsMoving(true);
-            return;
-         }
+        if (spaceship.getIsMoving === true) {
+          spaceship.setIsMoving(false);
+          spaceship.displacement(spaceship.getLocation.getRotation, 30);
+          spaceship.screenLimit(spaceship.getLocation);
+          spaceship.setIsMoving(true);
+          return;
+        }
       }
     });
-
   }, []);
 
   return (

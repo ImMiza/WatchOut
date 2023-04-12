@@ -5,7 +5,9 @@ import Spaceship from "./utils/Spaceship";
 import Location from './utils/Location';
 import Timer, {timervalue} from './components/settings/timer';
 import Popup from "./components/popup/Popup";
+import Scoreboard from "./components/popup/Scoreboard";
 import Meteor from "./utils/Meteor";
+import Modal from "./components/Modal";
 
 
 
@@ -21,19 +23,40 @@ function App() {
   let currentCleanMeteors = cleanMeteors;
 
   const spaceshipSize: number = 40;
-  const centerX: number = (window.innerWidth / 2.0) - spaceshipSize;
-  const centerY: number = (window.innerHeight / 2.0) - spaceshipSize;
-  const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
+  const centerX: number = window.innerWidth / 2.0 - spaceshipSize;
+  const centerY: number = window.innerHeight / 2.0 - spaceshipSize;
+  const [spaceship, setSpaceship] = useState(
+    new Spaceship(
+      new Location(centerX, centerY),
+      new Vector(0, 0),
+      "/images/rocket.svg",
+      spaceshipSize,
+      spaceshipSize,
+      true,
+      4
+    )
+  );
+
   const [meteors, setMeteors] = React.useState<Meteor[]>([]);
 
   const [timer, setTimer] = React.useState<timervalue>();
- 
+
   /**
    * Retry the game
    */
   function retry(): void {
     setMeteors([]);
-    setSpaceship(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
+    setSpaceship(
+      new Spaceship(
+        new Location(centerX, centerY),
+        new Vector(0, 0),
+        "/images/rocket.svg",
+        spaceshipSize,
+        spaceshipSize,
+        true,
+        4
+      )
+    );
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
     setStart(true);
@@ -61,12 +84,16 @@ function App() {
     currentCleanMeteors -= 1;
     if (currentCleanMeteors <= 0) {
       currentCleanMeteors = cleanMeteors;
-      setMeteors((prev) => prev.filter(m => {
-        return !(m.getLocation.getX < 0
-            || m.getLocation.getX > window.innerWidth
-            || m.getLocation.getY > window.innerHeight
-            || (m.getLocation.getY + m.getHeight) < 0)
-      }));
+      setMeteors((prev) =>
+        prev.filter((m) => {
+          return !(
+            m.getLocation.getX < 0 ||
+            m.getLocation.getX > window.innerWidth ||
+            m.getLocation.getY > window.innerHeight ||
+            m.getLocation.getY + m.getHeight < 0
+          );
+        })
+      );
     }
   }
 
@@ -76,8 +103,12 @@ function App() {
   function updateAddMeteor(): void {
     currentTimeBefore -= 1;
     if (currentTimeBefore <= 0) {
-      currentTimeBefore = timeBeforeApparition
-      setMeteors((prev) => prev.concat(new Meteor(spaceship.getLocation, '/images/meteor.png', 40, 40)));
+      currentTimeBefore = timeBeforeApparition;
+      setMeteors((prev) =>
+        prev.concat(
+          new Meteor(spaceship.getLocation, "/images/meteor.png", 40, 40)
+        )
+      );
     }
   }
 
@@ -86,11 +117,11 @@ function App() {
    * call 30 times per seconds (30fps)
    */
   function main(): void {
-    if(!isStart) {
+    if (!isStart) {
       return;
     }
 
-    if(isEnd) {
+    if (isEnd) {
       return;
     }
 
@@ -101,16 +132,14 @@ function App() {
     cleanMeteor();
 
     updateAddMeteor();
-
   }
+
+  const [openModal, setOpenModal] = useState(false);
 
   /**
    * don't touch
    */
-
-
   useEffect(() => {
-    
     const interval = setInterval(() => {
       main();
     }, 1000 / 27);
@@ -119,7 +148,7 @@ function App() {
   }, [isStart, isEnd]);
 
   useEffect(() => {
-    
+
     document.addEventListener("keydown", (event: KeyboardEvent) => {
       if (event.code === "Space") {
          if(spaceship.getIsMoving === true){
@@ -131,24 +160,40 @@ function App() {
          }
       }
     });
-    
+
   }, []);
 
   return (
-      <div>
-        {
-          !isStart &&
-            <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)} />
-        }
-        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} ></Timer>
-        {
-          isEnd &&
-            <Popup title={'Game over !'} buttonText={'Retry'} onClick={() => retry()} />
-        }
-        {spaceship.getJsxSpaceship()}
-        {meteors.map(m => m.jsxElement)}
-       
-      </div>
+    <div>
+      <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} ></Timer>
+      {!isStart && (
+        <Popup
+          title={"Watch out !"}
+          buttonText={"Start"}
+          onClick={() => setStart(true)}
+        />
+      )}
+      {isEnd && (
+        <>
+          <Popup
+            title={"Game over !"}
+            buttonText={"Retry"}
+            onClick={() => retry()}
+          />
+          <Scoreboard
+            title={"Votre score : 1 min 30 sec"}
+            buttonText={"Save Score"}
+            buttonList={"List of score"}
+            onClickSave={() => {
+              setOpenModal(true);
+            }}
+          />
+          {openModal && <Modal closeModal={setOpenModal} />}
+        </>
+      )}
+      {spaceship.getJsxSpaceship()}
+      {meteors.map((m) => m.jsxElement)}
+    </div>
   );
 }
 

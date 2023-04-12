@@ -182,7 +182,7 @@ function App() {
 
   return (
       <div>
-        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
+        <h1><Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} /></h1>
         {
           !isStart &&
             <div>
@@ -212,18 +212,15 @@ function App() {
                   <div className="pen-intro">
                     <h1>Game Over</h1>
                   </div>
+                  <Scoreboard title={"Votre score : 1 min 30 sec"} buttonText={"Save Score"} buttonList={"List of score"} onClickSave={() => {setOpenModal(true);}}    />
+                  <div className="container btn">
+                    <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >Save</button>
+                    <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >list score</button>
+                  </div>
                   <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >Try again</button>
                   <a className="eightbit-btn eightbit-btn--reset">Return</a>
                 </form>
               </div>
-              <Scoreboard
-                  title={"Votre score : 1 min 30 sec"}
-                  buttonText={"Save Score"}
-                  buttonList={"List of score"}
-                  onClickSave={() => {
-                    setOpenModal(true);
-                  }}
-              />
             </>
         }
         {spaceship.getJsxSpaceship()}

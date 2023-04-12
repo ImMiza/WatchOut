@@ -4,7 +4,7 @@ import {timervalue} from "./settings/timer";
 
 const Background: React.CSSProperties = {
   width: "600px",
-  height: "300px",
+  height: "350px",
   backgroundColor: "#384454",
   borderRadius: "10px",
   position: "fixed",
@@ -38,14 +38,17 @@ function Modal({ closeModal, timer }: { closeModal: (value: boolean) => void, ti
             name="name"
             maxLength={5}
             onChange={(value) => setUsername(value.target.value.trim())}
+            value={username.toUpperCase()}
           />
-          <input className="eightbit-btn" type="button" value="Envoyer" onClick={() => {
-              setLoading(true);
-              postScore({name: username, score: timer.time})
-                  .then(r => {
-                      setLoading(false);
-                      closeModal(false);
-                  });
+          <input disabled={username.trim().length <= 0} className="eightbit-btn" type="button" value="Envoyer" onClick={() => {
+              if(username.trim().length > 0) {
+                  setLoading(true);
+                  postScore({name: username.trim().toUpperCase(), score: timer.time})
+                      .then(r => {
+                          setLoading(false);
+                          closeModal(false);
+                      });
+              }
           }} />
         </form>
       </div>

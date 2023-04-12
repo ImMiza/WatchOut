@@ -170,37 +170,55 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} ></Timer>
-      {!isStart && (
-        <Popup
-          title={"Watch out !"}
-          buttonText={"Start"}
-          onClick={() => setStart(true)}
-        />
-      )}
-      {isEnd && (
-        <>
-          <Popup
-            title={"Game over !"}
-            buttonText={"Retry"}
-            onClick={() => retry()}
-          />
-          <Scoreboard
-            title={"Votre score : 1 min 30 sec"}
-            buttonText={"Save Score"}
-            buttonList={"List of score"}
-            onClickSave={() => {
-              setOpenModal(true);
-            }}
-          />
-          {openModal && <Modal closeModal={setOpenModal} />}
-        </>
-      )}
-      {spaceship.getJsxSpaceship()}
-      {meteors.map((m) => m.jsxElement)}
-      <MusicPlayer music={currentMusic} loop={false} />
-    </div>
+      <div>
+        <Timer timer_on={isStart} on_timer_end={(value) => setTimer(value)} />
+        {
+          !isStart &&
+            <div>
+              <div className="background">
+              <div className="shape1"></div>
+              <div className="shape2"></div>
+              </div>
+              <form>
+                <div className="pen-intro">
+                  <h1>Watch Out</h1>
+                </div>
+                <button className="eightbit-btn" onClick={() => setStart(true)} >Play Game</button>
+                <button className="eightbit-btn eightbit-btn--proceed">Setting</button>
+                <button className="eightbit-btn eightbit-btn--reset">Information</button>
+              </form>
+            </div>
+        }
+        {
+          isEnd &&
+            <>
+              <div>
+                <div className="background">
+                  <div className="shape1"></div>
+                  <div className="shape2"></div>
+                </div>
+                <form>
+                  <div className="pen-intro">
+                    <h1>Game Over</h1>
+                  </div>
+                  <button className="eightbit-btn eightbit-btn--proceed" onClick={() => retry()} >Try again</button>
+                  <a className="eightbit-btn eightbit-btn--reset">Return</a>
+                </form>
+              </div>
+              <Scoreboard
+                  title={"Votre score : 1 min 30 sec"}
+                  buttonText={"Save Score"}
+                  buttonList={"List of score"}
+                  onClickSave={() => {
+                    setOpenModal(true);
+                  }}
+              />
+            </>
+        }
+        {spaceship.getJsxSpaceship()}
+        {meteors.map(m => m.jsxElement)}
+        <MusicPlayer music={currentMusic} loop={false} />
+      </div>
   );
 }
 

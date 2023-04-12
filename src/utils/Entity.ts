@@ -21,13 +21,13 @@ export default class Entity {
         return this.location;
     }
 
-    set setLocation(value: Location) {
+    public setLocation(value: Location) {
         this.location = value;
     }
     get getVector(): Vector {
         return this.vector;
     }
-    set setVector(value: Vector) {
+    public setVector(value: Vector) {
         this.vector = value;
     }
 

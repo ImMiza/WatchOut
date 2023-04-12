@@ -9,6 +9,7 @@ import Scoreboard from "./components/popup/Scoreboard";
 import Meteor from "./utils/Meteor";
 import MusicPlayer, { Music } from "./utils/MusicPlayer";
 import Modal from "./components/Modal";
+import ModalList from "./components/ModalList";
 
 function App() {
   const [isStart, setStart] = React.useState<boolean>(false);
@@ -135,6 +136,7 @@ function App() {
   }
 
   const [openModal, setOpenModal] = useState(false);
+  const [openModalList, setOpenModalList] = useState(false);
 
   /**
    * don't touch
@@ -172,7 +174,7 @@ function App() {
             <div className="shape1"></div>
             <div className="shape2"></div>
           </div>
-          <form>
+          <div className="form">
             <div className="pen-intro">
               <h1>Watch Out</h1>
             </div>
@@ -182,10 +184,8 @@ function App() {
             <button className="eightbit-btn eightbit-btn--proceed">
               Setting
             </button>
-            <button className="eightbit-btn eightbit-btn--reset">
-              Information
-            </button>
-          </form>
+            <button className="eightbit-btn eightbit-btn--reset">Score</button>
+          </div>
         </div>
       )}
       {isEnd && (
@@ -195,7 +195,7 @@ function App() {
               <div className="shape1"></div>
               <div className="shape2"></div>
             </div>
-            <form>
+            <div className="form">
               <div className="pen-intro">
                 <h1>Game Over</h1>
               </div>
@@ -203,16 +203,18 @@ function App() {
                 Your Score : {timer?.minutes}min {timer?.seconds}s{" "}
                 {timer?.milliseconds}ms
               </p>
-              <div className="container btn">
+              {openModal && <Modal closeModal={setOpenModal} />}
+              {openModalList && <ModalList closeModal={setOpenModalList} />}
+              <div className="container-btn">
                 <button
                   className="eightbit-btn eightbit-btn--proceed"
-                  onClick={() => retry()}
+                  onClick={() => setOpenModal(true)}
                 >
                   Save
                 </button>
                 <button
                   className="eightbit-btn eightbit-btn--proceed"
-                  onClick={() => retry()}
+                  onClick={() => setOpenModalList(true)}
                 >
                   list score
                 </button>
@@ -224,7 +226,7 @@ function App() {
                 Try again
               </button>
               <a className="eightbit-btn eightbit-btn--reset">Return</a>
-            </form>
+            </div>
           </div>
         </>
       )}

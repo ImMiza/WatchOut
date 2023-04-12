@@ -17,6 +17,12 @@ const Background: React.CSSProperties = {
   zIndex: 10,
 };
 
+const Title: React.CSSProperties = {
+  color: "white",
+  textAlign: "center",
+  lineHeight: "64px",
+};
+
 const Button: React.CSSProperties = {
   background: "black",
   boxShadow: "10px 10px 4px rgba(0, 0, 0, 0.25)",
@@ -31,29 +37,19 @@ const Button: React.CSSProperties = {
 
 const Body: React.CSSProperties = {};
 
-function Modal({ closeModal }: { closeModal: any }) {
+function ModalList({ closeModal }: { closeModal: any }) {
   return (
     <div style={Background}>
-      <h1>Save your score ! </h1>
-      <h2>Veuillez saisir votre pseudo :</h2>
+      <div style={Title}> BEST SCORE</div>
       <div style={Body}>
-        <form className="modalform">
-          <input
-            className="eightbit-btn eightbit-btn--input"
-            type="text"
-            name="name"
-          />
-          <input className="eightbit-btn" type="submit" value="Envoyer" />
-        </form>
+        <p>NAME : </p>
+        <p>SCORE :</p>
       </div>
-      <button
-        className="eightbit-btn eightbit-btn--reset"
-        onClick={() => closeModal(false)}
-      >
-        Return
+      <button style={Button} onClick={() => closeModal(false)}>
+        RETURN
       </button>
     </div>
   );
 }
 
-export default Modal;
+export default ModalList;

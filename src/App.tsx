@@ -130,13 +130,9 @@ function App() {
     if (isEnd) {
       return;
     }
-
     updateMeteors();
-
     setSpaceship(Object.create(spaceship.startRotation()));
-
     cleanMeteor();
-
     updateAddMeteor();
   }
 

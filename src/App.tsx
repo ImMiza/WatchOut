@@ -6,11 +6,15 @@ import Location from './utils/Location';
 import Timer from './components/settings/timer';
 import Popup from "./components/popup/Popup";
 import Meteor from "./utils/Meteor";
+import MusicPlayer, { Music } from "./utils/MusicPlayer";
 
 function App() {
 
   const [isStart, setStart] = React.useState<boolean>(false);
   const [isEnd, setEnd] = React.useState<boolean>(false);
+  const [currentMusic, setCurrentMusic] = React.useState<Music>(Music.nomusic);
+  const [isLoop, setLoop] = React.useState<boolean>(true);
+
 
   let timeBeforeApparition = 60;
   let currentTimeBefore = timeBeforeApparition;
@@ -22,7 +26,6 @@ function App() {
   const centerX: number = (window.innerWidth / 2.0) - spaceshipSize;
   const centerY: number = (window.innerHeight / 2.0) - spaceshipSize;
   const [spaceship, setSpaceship] = useState(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
-
   const [meteors, setMeteors] = React.useState<Meteor[]>([]);
 
   /**
@@ -33,6 +36,7 @@ function App() {
     setSpaceship(new Spaceship(new Location(centerX,centerY), new Vector(0,0), '/images/rocket.svg', spaceshipSize, spaceshipSize, true, 4));
     currentTimeBefore = timeBeforeApparition;
     currentCleanMeteors = cleanMeteors;
+    setCurrentMusic(Music.musique);
     setStart(true);
     setEnd(false);
   }
@@ -43,6 +47,7 @@ function App() {
   function updateMeteors(): void {
     setMeteors((prev) => prev.map(m => {
       if (Entity.checkCollision(m, spaceship)) {
+        setCurrentMusic(Music.explosion);
         setEnd(true);
       }
       m.move();
@@ -89,17 +94,13 @@ function App() {
     if(isEnd) {
       return;
     }
-
     updateMeteors();
-
     setSpaceship(Object.create(spaceship.startRotation()));
-
     cleanMeteor();
-
     updateAddMeteor();
   }
 
-  /**
+   /**
    * don't touch
    */
   useEffect(() => {
@@ -114,7 +115,7 @@ function App() {
       <div>
         {
           !isStart &&
-            <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)} />
+            <Popup title={'Watch out !'} buttonText={'Start'} onClick={() => setStart(true)}/>
         }
         {
           isEnd &&
@@ -122,6 +123,7 @@ function App() {
         }
         {spaceship.getJsxSpaceship()}
         {meteors.map(m => m.jsxElement)}
+        <MusicPlayer music={currentMusic} loop={false} />
       </div>
   );
 }

@@ -197,12 +197,8 @@ function App() {
               <h1>Watch Out</h1>
             </div>
             <button className="eightbit-btn" onClick={() => {
-              setStart(true);
-              if (Settings.isSoundAllow()) {
-                setLoop(true);
-                setCurrentMusic(Music.musique);
-              }
-            }}>
+              retry();
+              }}>
               Play Game
             </button>
             <button className="eightbit-btn eightbit-btn--proceed" onClick={() => setOpenSetting(true)} >
@@ -258,7 +254,16 @@ function App() {
               >
                 Try again
               </button>
-              <a className="eightbit-btn eightbit-btn--reset">Return</a>
+              <button className="eightbit-btn" onClick={() => {
+                setEnd(false);
+                setStart(false);
+                  if (Settings.isSoundAllow()) {
+                    setLoop(true);
+                    setCurrentMusic(Music.musique);
+                  }
+                }}>
+                Return
+              </button>
             </div>
           </div>
         </>
